@@ -1,0 +1,114 @@
+<form (ngSubmit)="submit()" #newForm="ngForm" autocomplete="off" class="form">
+
+	<p-card header="{{title}}">
+
+		<div class="p-fluid">
+
+			<div class="p-field">
+
+				<label for="name">Product ID</label>
+
+				<input
+					id="productID"
+					name="productID"
+					type="number"
+					pInputText
+					[(ngModel)]="item.productID"
+					#productID="ngModel"
+					required
+					min="1"
+					max="999999999999"
+					size="13"/>
+
+				<small class="p-error">
+				<ng-container *ngIf="!((productID.valid || productID.pristine) && !productID.touched)">
+				<ng-template [ngIf]="productID.hasError('required')">
+				Product ID is required.
+				</ng-template>
+				<ng-template [ngIf]="productID.hasError('max')">
+				Maximum value is 999999999999.
+				</ng-template>
+				<ng-template [ngIf]="productID.hasError('min')">
+				Minimum value is 1.
+				</ng-template>
+				</ng-container>
+				</small>
+			</div>
+
+			<div class="p-field">
+
+				<label for="name">Product Name</label>
+
+				<input
+					id="productName"
+					name="productName"
+					type="text"
+					pInputText
+					[(ngModel)]="item.productName"
+					#productName="ngModel"
+					required
+					maxlength="50"
+					size="50"/>
+
+				<small class="p-error">
+				<ng-container *ngIf="!((productName.valid || productName.pristine) && !productName.touched)">
+				<ng-template [ngIf]="productName.hasError('required')">
+				Product name is required.
+				</ng-template>
+				</ng-container>
+				</small>
+
+			</div>
+
+			<div class="p-field">
+
+				<label for="name">Manager Name</label>
+
+				<input
+					id="manager"
+					name="manager"
+					type="text"
+					pInputText
+					[(ngModel)]="item.manager"
+					#manager="ngModel"
+					maxlength="30"
+					size="30"/>
+
+			</div>
+
+			<div class="p-field">
+
+				<label for="name">Sales start date</label>
+
+				<p-calendar
+					id="salesStartDate"
+					name="salesStartDate"
+					[(ngModel)]="item.salesStartDate"
+					#salesStartDate="ngModel"
+					[required]="true"
+					maxlength="10"
+					[showIcon]="true"
+					[monthNavigator]="true"
+					[yearNavigator]="true"
+					class="calendar"></p-calendar>
+
+				<small class="p-error">
+				<ng-container *ngIf="!((salesStartDate.valid || salesStartDate.pristine) && !salesStartDate.touched)">
+				<ng-template [ngIf]="salesStartDate.hasError('required')">
+				Sales start date is required.
+				</ng-template>
+				</ng-container>
+				</small>
+	
+			</div>
+
+		</div>
+
+		<div class="demo-container p-p-0 p-p-sm-1 p-p-md-2 p-p-lg-3">
+			<button pButton pRipple type="submit" label="Save" class="p-button-raised p-button-text" [disabled]="!newForm.valid"></button>
+			<button pButton pRipple type="reset" label="Clear" class="p-button-raised p-button-text p-button-plain"></button>
+		</div>
+
+	</p-card>
+
+</form>

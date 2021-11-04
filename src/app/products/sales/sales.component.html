@@ -1,0 +1,51 @@
+<p-card header="Sales" *ngIf="items">
+
+	<p-table #table [columns]="items.header" [value]="items.data"
+		dataKey="productID"
+		[rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines"
+		[paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+		[globalFilterFields]="['id','name','totalSales']">
+
+		<ng-template pTemplate="caption">
+			<div class="p-d-flex p-ai-center p-jc-between">
+				<button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="newClick()"></button>
+				<button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"></button>
+				<span class="p-input-icon-left">
+					<i class="pi pi-search"></i>
+					<input pInputText type="text" placeholder="Search keyword" />
+				</span>
+			</div>
+		</ng-template>
+
+		<ng-template pTemplate="header" let-columns>
+			<tr *ngFor="let row of items.rows">
+				<th *ngFor="let cell of row.cells"
+					pSortableColumn="{{cell.name}}"
+					[attr.colspan]="cell.colspan"
+					[attr.rowspan]="cell.rowspan">
+					{{cell.data}} <p-sortIcon field="{{cell.name}}"></p-sortIcon>
+				</th>
+			</tr>
+		</ng-template>
+
+		<ng-template pTemplate="body" let-rowData>
+			<tr>
+				<ng-container *ngFor="let cell of rowData | keyvalue">
+				<td pEditableColumn>
+					<p-cellEditor>
+						<ng-template pTemplate="input">
+							<input pInputText type="text" />
+							<!-- [(ngModel)]="rowData[cell.key]" -->
+						</ng-template>
+						<ng-template pTemplate="output">
+							{{cell.value}}
+						</ng-template>
+					</p-cellEditor>
+				</td>
+				</ng-container>
+			</tr>
+		</ng-template>
+
+	</p-table>
+
+</p-card>

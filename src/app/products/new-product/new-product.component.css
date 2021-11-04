@@ -1,0 +1,11 @@
+form {
+	padding-top:1em;
+}
+.p-field {
+	margin-top: 0.5em;
+	margin-bottom: 3ex;
+}
+
+.calendar .p-datepicker {
+	width: 80%;
+}

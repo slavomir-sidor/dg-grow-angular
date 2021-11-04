@@ -1,0 +1,27 @@
+<form (ngSubmit)="submit()" #loginForm="ngForm" autocomplete="off">
+
+	<p-card header="Login" styleClass="p-col-6">
+
+		<div class="p-fluid">
+
+			<div class="p-field">
+				<label for="login">Username</label>
+				<input id="login" name="login" type="text" pInputText [(ngModel)]="user.login" #login="ngModel" />
+			</div>
+
+			<div class="p-field">
+				<label for="password">Password</label>
+				<input type="password" pInputText id="password" name="password" [(ngModel)]="user.password" #password="ngModel">
+			</div>
+
+		</div>
+
+		<ng-template pTemplate="footer">
+			<p>Default application login/password is user/Passw0rd.</p>
+			<button pButton pRipple type="submit" label="Log In" class="p-button-raised p-button-text" [disabled]="!loginForm.valid"></button>
+		</ng-template>
+
+	</p-card>
+
+</form>
+<p-messages></p-messages>

@@ -1,0 +1,13 @@
+<p-menubar [model]="items" *ngIf="isAuthenticated()">
+	<ng-template pTemplate="start">
+		<img src="assets/primeng-logo-dark.svg" height="40" class="p-mr-2">
+	</ng-template>
+	<ng-template pTemplate="end">
+		<label></label>
+		<a class="p-element p-button-raised p-button p-component ng-star-inserted" [routerLink]="['','authentication','logout']">
+			<span class="p-button-label">Logout</span>
+		</a>
+	</ng-template>
+</p-menubar>
+<p-messages></p-messages>
+<router-outlet></router-outlet>
