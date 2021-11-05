@@ -17,6 +17,7 @@ import { PanelModule } from 'primeng/panel';
 import { CalendarModule } from 'primeng/calendar';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 /**Components */
 import { TableComponent } from './table/table.component';
@@ -46,7 +47,8 @@ import { MessageService } from 'primeng/api';
 		ButtonModule,
 		CalendarModule,
 		DynamicDialogModule,
-		ToastModule
+		ToastModule,
+		DialogModule
 	],
 	exports: [
 		CommonModule,
@@ -67,7 +69,8 @@ import { MessageService } from 'primeng/api';
 		TableComponent,
 		CalendarModule,
 		DynamicDialogModule,
-		ToastModule
+		ToastModule,
+		DialogModule
 	],
 	providers: [
 		MessageService,

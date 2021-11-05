@@ -5,25 +5,30 @@
 		[value]="items.data"
 		dataKey="productID"
 		[rows]="10"
+		(onEditComplete)="onEditComplete($event)"
 		[showCurrentPageReport]="true"
 		[rowsPerPageOptions]="[10,25,50]"
 		styleClass="p-datatable-gridlines"
 		[paginator]="true"
 		currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-		[globalFilterFields]="item.filters">
+		[globalFilterFields]="items.filters">
 
 		<ng-template pTemplate="caption">
 			<div class="p-d-flex p-ai-center p-jc-between">
 				<button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="newClick()"></button>
-				<button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"></button>
+
 				<span class="p-input-icon-left">
 					<i class="pi pi-search"></i>
-					<input pInputText type="text" placeholder="Search keyword" />
+					<input pInputText
+						type="text"
+						[(ngModel)]="searchText"
+						(input)="table.filterGlobal(searchText, 'contains')"
+						placeholder="Search keyword" />
 				</span>
 			</div>
 		</ng-template>
 
-		<ng-template pTemplate="header" let-columns>
+		<ng-template pTemplate="header" let-columns >
 			<tr>
 				<ng-container *ngFor="let column of columns">
 				<th 
@@ -50,23 +55,61 @@
 			</tr>
 		</ng-template>
 
-		<ng-template pTemplate="body" let-rowData let-columns>
+		<ng-template pTemplate="body" let-product>
+
 			<tr>
-				<ng-container *ngFor="let column of columns">
-				<td pEditableColumn>
-					<p-cellEditor>
-						<ng-template pTemplate="input">
-							<input pInputText type="text" [(ngModel)]="rowData[col.field]"/> 
-						</ng-template>
-						<ng-template pTemplate="output">
-							{{rowData[col.field]}}
-						</ng-template>
-					</p-cellEditor>
-				</td>
+
+				<ng-container *ngFor="let column of items.column">
+
+					<ng-container *ngIf="column.subHeaders; else col">
+
+						<ng-container *ngFor="let column of column.subHeaders">
+							<td pEditableColumn [pEditableColumnField]="column.field">
+								<p-cellEditor>
+									<ng-template pTemplate="input">
+										<input pInputText [(ngModel)]="product[column.field]">
+									</ng-template>
+									<ng-template pTemplate="output">
+									{{product[column.field]}}
+									</ng-template>
+								</p-cellEditor>
+							</td>
+						</ng-container>
+
+					</ng-container>
+
+					<ng-template #col>
+
+						<td pEditableColumn [pEditableColumnField]="column.field">
+							<p-cellEditor>
+								<ng-template pTemplate="input">
+									<input pInputText [(ngModel)]="product[column.field]">
+								</ng-template>
+								<ng-template pTemplate="output">
+								{{product[column.field]}}
+								</ng-template>
+							</p-cellEditor>
+						</td>
+
+					</ng-template>
+
 				</ng-container>
+
 			</tr>
+
 		</ng-template>
 
 	</p-table>
+
+	<p-dialog
+		[(visible)]="dialog"
+		[style]="{width: '500px;', height:'950px'}"
+		header=""
+		[modal]="true"
+		styleClass="p-fluid">
+
+		<app-new-product [modal]="true" [onSave]="onNewProductSave"></app-new-product>
+
+	</p-dialog>
 
 </p-card>

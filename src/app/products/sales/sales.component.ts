@@ -15,6 +15,10 @@ export class SalesComponent implements OnInit {
 
 	items?: any;
 
+	dialog: boolean = false;
+
+	searchText: string = "";
+
 	constructor(
 		private dialogService: DialogService,
 		private messageService: MessageService,
@@ -34,18 +38,20 @@ export class SalesComponent implements OnInit {
 		//this.productService.salesChangedEmmiter.unsubscribe();
 	}
 
-	newClick(): void {
-		const ref = this.dialogService.open(NewProductComponent, {
-			width: '50%',
-			height: '100%'
-		});
+	public newClick(): void {
+		this.dialog = true;
+	}
+	
+	public onNewProductSave=(): void =>{
+		this.dialog = false;
 	}
 
 	private onProductSalesChanged(data: any): void {
 		this.items = data;
 	}
-	
-	log(data:any){
-		console.log(data);
+
+	onEditComplete(event: any): void {
+		this.productService.setSales(this.items);
 	}
+
 }

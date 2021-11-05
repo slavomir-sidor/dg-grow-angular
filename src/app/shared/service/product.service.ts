@@ -141,7 +141,7 @@ export class ProductService {
 				.filter(key => cols.includes(key))
 				.reduce((obj: any, key) => {
 					obj[key] = items.data[i][key];
-					total += items.data[i][key];
+					total += parseFloat(items.data[i][key]);
 					return obj;
 				}, {});
 			items.data[i]["totalSales"] = total;
@@ -149,10 +149,7 @@ export class ProductService {
 		return items;
 	}
 
-	/**
-	 * 
-	 */
-	private setSales(items: any): void {
+	public setSales(items: any): void {
 		this.sales = <any>this.calculateSalesTotals(items);
 		window.localStorage.setItem(ProductService.STORAGE_KEY, JSON.stringify(this.sales));
 		this.salesChangedEmmiter.emit(this.sales);
@@ -189,44 +186,5 @@ export class ProductService {
 			}
 		}
 		return items;
-	}
-
-	private normalizeColumns(header: TableHeader, columns: any): TableHeader {
-
-		for (let i = 0; i < columns.length; i++) {
-			header = this.normalizeColumn(header, columns[i], 0, i);
-		}
-
-		return header;
-	}
-
-	private normalizeColumn(header: TableHeader, column: any, row: number, col: number): TableHeader {
-		let dimmension = this.getColumnDimension(column);
-		header.setCell(column['field'], column['header'], row, col, dimmension.width, 1);
-		return header;
-	}
-
-	private getDataDimension(columns: any, row: number, col: number): any {
-
-		for (let i = 0; i < columns.length; i++) {
-			columns[i].dimension = this.getColumnDimension(columns[i]);
-		}
-
-		return columns;
-	}
-
-	private getColumnDimension(column: any): any {
-
-		let dimenstion = {
-			width: 1,
-			height: 1
-		};
-
-		if (column.subHeaders) {
-			for (let i = 0; i < column.subHeaders.length; i++) {
-				dimenstion.width += this.getColumnDimension(column.subHeaders[i]).width;
-			}
-		}
-		return dimenstion;
 	}
 }
