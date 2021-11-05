@@ -1,9 +1,14 @@
 form {
-	padding-top:1em;
+	padding-top: 1em;
 }
+
 .p-field {
 	margin-top: 0.5em;
-	margin-bottom: 3ex;
+	margin-bottom: 2ex;
+}
+
+.p-field label {
+	padding-bottom: 2ex!important;
 }
 
 .calendar .p-datepicker {

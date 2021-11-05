@@ -1,10 +1,16 @@
 <p-card header="Sales" *ngIf="items">
 
-	<p-table #table [columns]="items.header" [value]="items.data"
+	<p-table #table 
+		[columns]="items.column"
+		[value]="items.data"
 		dataKey="productID"
-		[rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines"
-		[paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-		[globalFilterFields]="['id','name','totalSales']">
+		[rows]="10"
+		[showCurrentPageReport]="true"
+		[rowsPerPageOptions]="[10,25,50]"
+		styleClass="p-datatable-gridlines"
+		[paginator]="true"
+		currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+		[globalFilterFields]="item.filters">
 
 		<ng-template pTemplate="caption">
 			<div class="p-d-flex p-ai-center p-jc-between">
@@ -18,27 +24,42 @@
 		</ng-template>
 
 		<ng-template pTemplate="header" let-columns>
-			<tr *ngFor="let row of items.rows">
-				<th *ngFor="let cell of row.cells"
-					pSortableColumn="{{cell.name}}"
-					[attr.colspan]="cell.colspan"
-					[attr.rowspan]="cell.rowspan">
-					{{cell.data}} <p-sortIcon field="{{cell.name}}"></p-sortIcon>
+			<tr>
+				<ng-container *ngFor="let column of columns">
+				<th 
+					pSortableColumn="{{column.field}}"
+					[attr.colspan]="column.subHeaders?column.subHeaders.length:1"
+					[attr.rowspan]="column.subHeaders?1:2">
+					{{column.header}}
+					<p-sortIcon field="{{column.field}}" *ngIf="column.field"></p-sortIcon>
 				</th>
+				</ng-container>
+			</tr>
+			<tr>
+				<ng-container *ngFor="let column of columns">
+				<ng-container *ngIf="column.subHeaders">
+				<ng-container *ngFor="let subColumn of column.subHeaders">
+				<th 
+					pSortableColumn="{{subColumn.field}}">
+					{{subColumn.header}}
+					<p-sortIcon field="{{subColumn.field}}"></p-sortIcon>
+				</th>
+				</ng-container>
+				</ng-container>
+				</ng-container>
 			</tr>
 		</ng-template>
 
-		<ng-template pTemplate="body" let-rowData>
+		<ng-template pTemplate="body" let-rowData let-columns>
 			<tr>
-				<ng-container *ngFor="let cell of rowData | keyvalue">
+				<ng-container *ngFor="let column of columns">
 				<td pEditableColumn>
 					<p-cellEditor>
 						<ng-template pTemplate="input">
-							<input pInputText type="text" />
-							<!-- [(ngModel)]="rowData[cell.key]" -->
+							<input pInputText type="text" [(ngModel)]="rowData[col.field]"/> 
 						</ng-template>
 						<ng-template pTemplate="output">
-							{{cell.value}}
+							{{rowData[col.field]}}
 						</ng-template>
 					</p-cellEditor>
 				</td>

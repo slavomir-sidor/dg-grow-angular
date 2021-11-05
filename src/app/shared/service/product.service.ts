@@ -5,13 +5,13 @@ import { Product } from '../models/product.model';
 export class TableHeader {
 	rows: Map<number, TableRow> = new Map();
 
-	setCell(name: string, data: any, row: number, cell: number, colspan: number =1, rowspan: number = 1) {
+	setCell(name: string, data: any, row: number, cell: number, colspan: number = 1, rowspan: number = 1) {
 		let cellRow = this.rows.get(row);
 		if (typeof cellRow === "undefined") {
 			cellRow = new TableRow();
 		}
 		cellRow.setCell(name, data, cell, colspan, rowspan);
-		this.rows.set(row,cellRow);
+		this.rows.set(row, cellRow);
 	}
 }
 export class TableRow {
@@ -27,7 +27,6 @@ export class TableRow {
 		this.cells.set(cell, rowCell);
 	}
 }
-
 export class TableCell {
 	colspan?: number;
 	rowspan?: number;
@@ -100,7 +99,7 @@ export class ProductService {
 				this.setSales(JSON.parse(sales));
 				resolve(this.sales);
 			} else {
-				this.http.get("./assets/products/potato_sales-run.json").toPromise()
+				this.http.get("./assets/products/potato_sales.json").toPromise()
 					.then((sales) => {
 						this.setSales(this.normalize(sales));
 						resolve(sales);
@@ -130,13 +129,8 @@ export class ProductService {
 				// instead of kind of language message, column.header
 				for (let j = 0; j < items.column[i].subHeaders.length; j++) {
 					cols.push(items.column[i].subHeaders[j].field);
+					items.column[i].subHeaders[j].align = "right";
 				}
-			}
-
-			// missing column.field for Total sales
-			if (items.column[i].header === "Total sales") {
-				items.column[i].field = "totalSales";
-				items.column[i].editable = false;
 			}
 		}
 
@@ -159,18 +153,42 @@ export class ProductService {
 	 * 
 	 */
 	private setSales(items: any): void {
-		this.sales = <any>items;
-		//this.calculateSalesTotals(items);
-		//window.localStorage.setItem(ProductService.STORAGE_KEY, JSON.stringify(this.sales));
+		this.sales = <any>this.calculateSalesTotals(items);
+		window.localStorage.setItem(ProductService.STORAGE_KEY, JSON.stringify(this.sales));
 		this.salesChangedEmmiter.emit(this.sales);
 	}
 
-	private normalize(items: any): Table {
+	/**
+	 * Prepare data, fix missing fields, which are required for PrimeNG UI Components
+	 * This method is called when data are loaded and only once in this case. They are stored manipulated in runtime.
+	 *
+	 * - Column field for "Total Sales" totalSales, required for sorting
+	 * - globalFilterFields required for filtering
+	 * 
+	 */
+	private normalize(items: any): any {
+		/*
 		let table = new Table();
 		table.data = items['data'];
 		table.header = this.normalizeColumns(table.header, items['column']);
+		*/
 
-		return table;
+		// Filter array
+		items['filters'] = [];
+		for (let i = 0; i < items.column.length; i++) {
+			if (items.column[i].header === "Total sales") {
+				items.column[i].field = "totalSales"//needed for primeng data table component for sorting sorting column identification;
+				items.column[i].editable = false; // Table editor requires to know which fields are editable, they are edited inline.
+			}
+			if (!items.column[i].subHeaders) {
+				items['filters'].push(items.column[i].field);
+			} else {
+				for (let j = 0; j < items.column[i].subHeaders.length; j++) {
+					items['filters'].push(items.column[i].field);
+				}
+			}
+		}
+		return items;
 	}
 
 	private normalizeColumns(header: TableHeader, columns: any): TableHeader {
@@ -182,7 +200,7 @@ export class ProductService {
 		return header;
 	}
 
-	private normalizeColumn(header: TableHeader, column: any, row : number, col: number): TableHeader {
+	private normalizeColumn(header: TableHeader, column: any, row: number, col: number): TableHeader {
 		let dimmension = this.getColumnDimension(column);
 		header.setCell(column['field'], column['header'], row, col, dimmension.width, 1);
 		return header;

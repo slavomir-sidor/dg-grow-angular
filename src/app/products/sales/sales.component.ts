@@ -36,12 +36,16 @@ export class SalesComponent implements OnInit {
 
 	newClick(): void {
 		const ref = this.dialogService.open(NewProductComponent, {
-			width: '90%',
-			height: '80%'
+			width: '50%',
+			height: '100%'
 		});
 	}
 
-	private onProductSalesChanged(data: Table): void {
+	private onProductSalesChanged(data: any): void {
 		this.items = data;
+	}
+	
+	log(data:any){
+		console.log(data);
 	}
 }
