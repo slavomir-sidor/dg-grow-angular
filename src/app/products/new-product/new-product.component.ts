@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Product } from '../../shared/models/product.model';
 import { Router } from '@angular/router';
 import { ProductService } from '../../shared/service/product.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
 	selector: 'app-new-product',
@@ -21,6 +22,8 @@ export class NewProductComponent implements OnInit {
 	@Input()
 	modal: boolean = false;
 
+	@ViewChild('newForm') form: NgForm;
+
 	constructor(
 		private messageService: MessageService,
 		private productService: ProductService,
@@ -34,11 +37,10 @@ export class NewProductComponent implements OnInit {
 	public submit(): void {
 		this.productService.putProduct(this.item)
 			.then((response) => {
+				this.item = new Product();
 				if (this.modal) {
-					this.onSave? this.onSave():true;
-				} else {
-					this.router.navigate(['', 'products', 'sales']);
-				}
+					this.onSave ? this.onSave() : true;
+				} this.form.reset();
 			}).catch((error) => {
 				this.messageService.add({ severity: 'error', summary: 'Save product', detail: "You are not able to post wrong data and persistant api is not provided." });
 			});

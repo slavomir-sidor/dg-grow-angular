@@ -1,4 +1,4 @@
-<form (ngSubmit)="submit()" #newForm="ngForm" autocomplete="off" class="form">
+<form (ngSubmit)="submit() " #newForm="ngForm" autocomplete="off" class="form">
 
 	<p-card header="{{title}}">
 
@@ -88,6 +88,7 @@
 					[required]="true"
 					maxlength="10"
 					[showIcon]="true"
+					dateFormat="yy/mm/dd"
 					[monthNavigator]="true"
 					[yearNavigator]="true"
 					class="calendar"></p-calendar>
