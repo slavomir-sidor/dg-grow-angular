@@ -2,43 +2,6 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Product } from '../models/product.model';
 
-export class TableHeader {
-	rows: Map<number, TableRow> = new Map();
-
-	setCell(name: string, data: any, row: number, cell: number, colspan: number = 1, rowspan: number = 1) {
-		let cellRow = this.rows.get(row);
-		if (typeof cellRow === "undefined") {
-			cellRow = new TableRow();
-		}
-		cellRow.setCell(name, data, cell, colspan, rowspan);
-		this.rows.set(row, cellRow);
-	}
-}
-export class TableRow {
-	cells: Map<number, TableCell> = new Map();
-
-	setCell(name: string, data: any, cell: number, colspan: number = 1, rowspan: number = 1) {
-
-		let rowCell = new TableCell();
-		rowCell.data = data;
-		rowCell.name = name;
-		rowCell.colspan = colspan;
-		rowCell.rowspan = rowspan;
-		this.cells.set(cell, rowCell);
-	}
-}
-export class TableCell {
-	colspan?: number;
-	rowspan?: number;
-	name?: string;
-	data?: any;
-}
-
-export class Table {
-	header: TableHeader = new TableHeader();
-	data: [] = [];
-}
-
 @Injectable({
 	providedIn: 'root'
 })
@@ -164,18 +127,12 @@ export class ProductService {
 	 * 
 	 */
 	private normalize(items: any): any {
-		/*
-		let table = new Table();
-		table.data = items['data'];
-		table.header = this.normalizeColumns(table.header, items['column']);
-		*/
-
 		// Filter array
 		items['filters'] = [];
 		for (let i = 0; i < items.column.length; i++) {
 			if (items.column[i].header === "Total sales") {
 				items.column[i].field = "totalSales"//needed for primeng data table component for sorting sorting column identification;
-				items.column[i].editable = false; // Table editor requires to know which fields are editable, they are edited inline.
+				items.column[i].noedit = true; // Table editor requires to know which fields are editable, they are edited inline.
 			}
 			if (!items.column[i].subHeaders) {
 				items['filters'].push(items.column[i].field);

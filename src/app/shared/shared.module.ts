@@ -20,14 +20,12 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 /**Components */
-import { TableComponent } from './table/table.component';
 
 /**Services */
 import { MessageService } from 'primeng/api';
 
 @NgModule({
 	declarations: [
-		TableComponent,
 	],
 	imports: [
 		CommonModule,
@@ -66,7 +64,6 @@ import { MessageService } from 'primeng/api';
 		PanelModule,
 		ToolbarModule,
 		ButtonModule,
-		TableComponent,
 		CalendarModule,
 		DynamicDialogModule,
 		ToastModule,

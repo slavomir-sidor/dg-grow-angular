@@ -80,7 +80,13 @@
 
 					<ng-template #col>
 
+						<ng-container *ngIf="column.noedit; else edit">
+						<td>{{product[column.field]}}</td>
+						</ng-container>
+
+						<ng-template #edit>
 						<td pEditableColumn [pEditableColumnField]="column.field">
+							
 							<p-cellEditor>
 								<ng-template pTemplate="input">
 									<input pInputText [(ngModel)]="product[column.field]">
@@ -90,6 +96,7 @@
 								</ng-template>
 							</p-cellEditor>
 						</td>
+						</ng-template>
 
 					</ng-template>
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { DialogService } from 'primeng/dynamicdialog';
-import { ProductService, Table } from '../../shared/service/product.service';
+import { ProductService } from '../../shared/service/product.service';
 import { NewProductComponent } from '../new-product/new-product.component';
 
 @Component({
